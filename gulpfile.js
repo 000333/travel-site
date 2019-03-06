@@ -3,7 +3,8 @@ const { watch, src, dest, pipe, series, parallel } = require('gulp');
 var postcss = require('gulp-postcss'),
     autoprefixer = require('autoprefixer'),
     cssvars = require('postcss-simple-vars'),
-    nested = require('postcss-nested');
+    nested = require('postcss-nested'),
+    cssImport = require('postcss-import');
 
 function defaultTask(cb) {
   console.log("Hooray - you created a gulp task!")
@@ -27,7 +28,7 @@ ex. return src('src/*.js').pipe(uglify()).pipe(src('a/*.js')).pipe(rename()).pip
 function css() {
   /* basic syntax:  return src(glob).pipe(dest(glob));*/
   return src('./app/assets/styles/styles.css')
-    .pipe(postcss([ cssvars(), nested(), autoprefixer() ]))
+    .pipe(postcss([ cssImport(), cssvars(), nested(), autoprefixer() ]))
     .pipe(dest('./app/temp/styles'));
 }
 
