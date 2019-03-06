@@ -1,0 +1,16 @@
+$mainBlue: #2f5572;
+
+body {
+  background: white;
+  font-family:sans-serif;
+  margin: 10px;
+  color: $mainBlue;
+  columns: 10px 10;
+}
+
+.box {
+  a {
+    display: block;
+    padding: 10px;
+  }
+}

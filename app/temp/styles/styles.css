@@ -1,0 +1,13 @@
+body {
+  background: white;
+  font-family:sans-serif;
+  margin: 10px;
+  color: #2f5572;
+  -webkit-columns: 10px 10;
+          columns: 10px 10;
+}
+
+.box a {
+    display: block;
+    padding: 10px;
+  }
