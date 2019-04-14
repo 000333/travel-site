@@ -5,14 +5,15 @@ var browserSync = require('browser-sync').create(),
     autoprefixer = require('autoprefixer'),
     cssvars = require('postcss-simple-vars'),
     nested = require('postcss-nested'),
-    cssImport = require('postcss-import');
+    cssImport = require('postcss-import')
+    mixins = require('postcss-mixins');
 
 /* private tasks for file watching */
 // see /gulp/tasks/ for notes
 function css() {
   /* basic syntax:  return src(glob).pipe(dest(glob));*/
   return src('./app/assets/styles/styles.css')
-    .pipe(postcss([ cssImport(), cssvars(), nested(), autoprefixer() ]))
+    .pipe(postcss([ cssImport(), mixins(), cssvars(), nested(), autoprefixer() ]))
     .pipe(dest('./app/temp/styles'));
 }
 function cssInject() {
