@@ -6,7 +6,25 @@ var browserSync = require('browser-sync').create(),
     cssvars = require('postcss-simple-vars'),
     nested = require('postcss-nested'),
     cssImport = require('postcss-import')
-    mixins = require('postcss-mixins');
+    mixins = require('postcss-mixins'),
+    svgSprite = require('gulp-svg-sprite');
+
+/* sprite code */
+var config = {
+  mode: {
+    css: {
+      render: {
+        css: true
+      }
+    }
+  }
+};
+
+function createSprite() {
+  return src('./app/assets/images/icons/**/*.svg')
+    .pipe(svgSprite(config))
+    .pipe(dest('./app/temp/sprite/'));
+}
 
 /* private tasks for file watching */
 // see /gulp/tasks/ for notes
@@ -38,3 +56,4 @@ function defaultTask() {
 }
 
 exports.default = defaultTask;
+exports.createSprite = createSprite;
