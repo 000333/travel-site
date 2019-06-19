@@ -8,7 +8,8 @@ var browserSync = require('browser-sync').create(),
     cssImport = require('postcss-import')
     mixins = require('postcss-mixins'),
     svgSprite = require('gulp-svg-sprite'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    hexrgba = require('postcss-hexrgba');
     /*del = require('del');*/
 
 /* sprite code */
@@ -52,7 +53,7 @@ function copySpriteCSS() {
 function css() {
   /* basic syntax:  return src(glob).pipe(dest(glob));*/
   return src('./app/assets/styles/styles.css')
-    .pipe(postcss([ cssImport(), mixins(), cssvars(), nested(), autoprefixer() ]))
+    .pipe(postcss([ cssImport(), mixins(), cssvars(), nested(), hexrgba(), autoprefixer() ]))
     .pipe(dest('./app/temp/styles'));
 }
 function cssInject() {
