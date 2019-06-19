@@ -7,12 +7,15 @@ var browserSync = require('browser-sync').create(),
     nested = require('postcss-nested'),
     cssImport = require('postcss-import')
     mixins = require('postcss-mixins'),
-    svgSprite = require('gulp-svg-sprite');
+    svgSprite = require('gulp-svg-sprite'),
+    rename = require('gulp-rename');
+    /*del = require('del');*/
 
 /* sprite code */
 var config = {
   mode: {
     css: {
+      sprite: 'sprite.svg',
       render: {
         css: true
       }
@@ -20,10 +23,28 @@ var config = {
   }
 };
 
+/*  There are apparently some permissions issues with using del, so don't use it in this environment
+function cleanSVG(cb) {
+  return del('./app/temp/sprite', './app/assets/images/sprites');
+  console.log("It's done!");
+  cb();
+}*/
+
 function createSprite() {
   return src('./app/assets/images/icons/**/*.svg')
     .pipe(svgSprite(config))
     .pipe(dest('./app/temp/sprite/'));
+}
+
+function copySpriteSVG() {
+  return src('./app/temp/sprite/css/**/*.svg')
+    .pipe(dest('./app/assets/images/sprites/'));
+}
+
+function copySpriteCSS() {
+  return src ('./app/temp/sprite/css/*.css')
+    .pipe(rename('_sprite.css'))
+    .pipe(dest('./app/assets/styles/modules'));
 }
 
 /* private tasks for file watching */
@@ -43,7 +64,7 @@ function html(cb) {
   cb();
 }
 
-/* public tasks */
+/* public tasks for exporting */
 function defaultTask() {
   //watch my files plz
   browserSync.init({
@@ -55,5 +76,12 @@ function defaultTask() {
   watch('./app/assets/styles/**/*.css', series(css, cssInject))
 }
 
+function test(cb) {
+  console.log("Gulp is working!");
+  cb();
+}
+
+exports.test = test;
+
 exports.default = defaultTask;
-exports.createSprite = createSprite;
+exports.icons = series(createSprite, copySpriteSVG, copySpriteCSS);
