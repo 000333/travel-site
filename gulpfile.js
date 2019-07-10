@@ -87,9 +87,9 @@ function defaultTask() {
       baseDir: "app"
     }
   })
+  watch('./app/index.html', html)
   watch('./app/assets/styles/**/*.css', series(css, cssInject))
   watch('./app/assets/scripts/**/*.js', series(scripts, scriptsRefresh))
-  watch('./app/index.html', html)
 }
 
 exports.default = defaultTask;
