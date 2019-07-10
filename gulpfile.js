@@ -9,8 +9,8 @@ var browserSync = require('browser-sync').create(),
     mixins = require('postcss-mixins'),
     svgSprite = require('gulp-svg-sprite'),
     rename = require('gulp-rename'),
-    hexrgba = require('postcss-hexrgba');
-    /*del = require('del');*/
+    hexrgba = require('postcss-hexrgba'),
+    webpack = require('webpack');
 
 /* sprite code */
 var config = {
@@ -65,6 +65,20 @@ function html(cb) {
   cb();
 }
 
+function scripts(cb) {
+  webpack(require('./webpack.config.js'), function(err, stats) {
+    if (err) {
+      console.log(err.toString());
+    }
+    console.log(stats.toString());
+  });
+  cb();
+}
+function scriptsRefresh(cb) {
+  browserSync.reload();
+  cb();
+}
+
 /* public tasks for exporting */
 function defaultTask() {
   //watch my files plz
@@ -73,16 +87,10 @@ function defaultTask() {
       baseDir: "app"
     }
   })
-  watch('./app/index.html', html)
   watch('./app/assets/styles/**/*.css', series(css, cssInject))
+  watch('./app/assets/scripts/**/*.js', series(scripts, scriptsRefresh))
+  watch('./app/index.html', html)
 }
-
-function test(cb) {
-  console.log("Gulp is working!");
-  cb();
-}
-
-exports.test = test;
 
 exports.default = defaultTask;
 exports.icons = series(createSprite, copySpriteSVG, copySpriteCSS);
