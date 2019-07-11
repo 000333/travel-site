@@ -1,4 +1,5 @@
 import MobileMenu from './modules/MobileMenu';
+import './modules/StickyHeader';
 import ScrollReveal from 'scrollreveal';
 
 var mobileMenu = new MobileMenu();
