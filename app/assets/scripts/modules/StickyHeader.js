@@ -25,7 +25,7 @@ window.addEventListener('scroll', function() {
     $("#T-link").addClass("is-current-link");
     $("#F-link").removeClass("is-current-link");
     $("#OB-link").removeClass("is-current-link");
-  } else if (scrollpos >= (fF + 320)) {
+  } else if (scrollpos >= (fF + 520)) {
     $("#F-link").addClass("is-current-link");
     $("#T-link").removeClass("is-current-link");
     $("#OB-link").removeClass("is-current-link");
