@@ -14,6 +14,11 @@ var browserSync = require('browser-sync').create(),
 
 /* sprite code */
 var config = {
+  shape: {
+    spacing: {
+      padding: 1
+    }
+  },
   mode: {
     css: {
       sprite: 'sprite.svg',
@@ -24,13 +29,6 @@ var config = {
   }
 };
 
-/*  There are apparently some permissions issues with using del, so don't use it in this environment
-function cleanSVG(cb) {
-  return del('./app/temp/sprite', './app/assets/images/sprites');
-  console.log("It's done!");
-  cb();
-}*/
-
 function createSprite() {
   return src('./app/assets/images/icons/**/*.svg')
     .pipe(svgSprite(config))
@@ -38,7 +36,7 @@ function createSprite() {
 }
 
 function copySpriteSVG() {
-  return src('./app/temp/sprite/css/**/*.svg')
+  return src('./app/temp/sprite/css/**/*.{svg,png}')
     .pipe(dest('./app/assets/images/sprites/'));
 }
 
