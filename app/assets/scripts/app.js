@@ -1,6 +1,7 @@
 import MobileMenu from './modules/MobileMenu';
 import './modules/StickyHeader';
 import ScrollReveal from 'scrollreveal';
+import Modal from './modules/Modal';
 
 var mobileMenu = new MobileMenu();
 
@@ -16,3 +17,5 @@ function scrolly(classN) {
 
 scrolly('.feature-item');
 scrolly('.testimonial');
+
+var modal = new Modal;
