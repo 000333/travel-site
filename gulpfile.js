@@ -10,8 +10,68 @@ var browserSync = require('browser-sync').create(),
     svgSprite = require('gulp-svg-sprite'),
     rename = require('gulp-rename'),
     hexrgba = require('postcss-hexrgba'),
-    webpack = require('webpack');
+    webpack = require('webpack'),
+    imagemin = require('gulp-imagemin'),
+    fse = require('fs-extra'),
+    usemin = require('gulp-usemin'),
+    rev = require('gulp-rev'),
+    cleancss = require('gulp-clean-css'),
+    uglify = require('gulp-uglify');
 
+//===============================
+/* build task!! */
+function deleteDistFolder(cb) {
+  fse.emptydir('./docs', err => {
+    if (err) return console.error(err)
+    console.log('success!')
+  });
+  cb();
+}
+
+function copyGeneralFiles() {
+  var pathstoCopy = [
+    './app/**/*',
+    '!./app/index.html',
+    '!./app/assets/images/**',
+    '!./app/assets/styles/**',
+    '!./app/assets/scripts/**',
+    '!./app/temp',
+    '!./app/temp/**'
+  ]
+  return src(pathstoCopy)
+  .pipe(dest('./docs'));
+}
+
+function optimizeImages() {
+  return src(['./app/assets/images/**/*', '!./app/assets/images/icons', '!./app/assets/images/icons/**/*'])
+  .pipe(imagemin({
+    progressive: true,
+    interlaced: true,
+    multipass: true
+  }))
+  .pipe(dest('./docs/assets/images'));
+}
+
+function optimizeHTML() {
+  return src('./app/index.html')
+  .pipe(usemin({
+    css: [function() {return rev()}, function() {return cleancss()}],
+    js: [function() {return rev()}, function() {return uglify()}]
+  }))
+  .pipe(dest('./docs'));
+}
+
+//===============================
+/* preview dist */
+function previewDist() {
+  browserSync.init({
+    server: {
+      baseDir: "docs"
+    }
+  });
+}
+
+//===============================
 /* sprite code */
 var config = {
   shape: {
@@ -46,8 +106,8 @@ function copySpriteCSS() {
     .pipe(dest('./app/assets/styles/modules'));
 }
 
-/* private tasks for file watching */
-// see /gulp/tasks/ for notes
+//===============================
+/* file watching */
 function css() {
   /* basic syntax:  return src(glob).pipe(dest(glob));*/
   return src('./app/assets/styles/styles.css')
@@ -77,7 +137,8 @@ function scriptsRefresh(cb) {
   cb();
 }
 
-/* public tasks for exporting */
+//===============================
+/* default task */
 function defaultTask() {
   //watch my files plz
   browserSync.init({
@@ -90,5 +151,9 @@ function defaultTask() {
   watch('./app/assets/scripts/**/*.js', series(scripts, scriptsRefresh))
 }
 
+//===============================
+/* exported tasks*/
 exports.default = defaultTask;
 exports.icons = series(createSprite, copySpriteSVG, copySpriteCSS);
+exports.build = series(deleteDistFolder, optimizeImages, css, scripts, optimizeHTML, copyGeneralFiles);
+exports.predist = previewDist;

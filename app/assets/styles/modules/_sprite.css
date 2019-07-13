@@ -1,10 +1,10 @@
 .icon {
-  background: url("/assets/images/sprites/sprite-cbdfe7ac.svg");
+  background: url("../../assets/images/sprites/sprite-cbdfe7ac.svg");
   background-repeat: no-repeat;
 }
 
 .icon--clear-view-escapes {
-	background-position: 0 0;
+	background-position: 1.25% 1%;
 	width: 142.4px;
 	height: 59.53px;
 }
